@@ -1,0 +1,11 @@
+{
+    "server_port":"1201",
+    "mysql":{
+            "user":"root",
+            "password":"Vahid@123",
+            "dbname":"TestDB",
+            "protocol":"tcp",
+            "host":"127.0.0.1",
+            "port":"3306"
+            }
+}
