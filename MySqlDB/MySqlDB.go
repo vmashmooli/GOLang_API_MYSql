@@ -93,3 +93,53 @@ func InsertDB() (stat bool, num string) {
 	}
 	return Stat, num
 }
+
+func LoadDB() Cust {
+
+	// Load config from CONFIG.json file
+	file, _ := ioutil.ReadFile("CONFIG.json")
+	data := MyConfig{}
+	_ = json.Unmarshal([]byte(file), &data)
+
+	dns := fmt.Sprintf(
+		"%s:%s@%s(%s:%s)/%s?charset=utf8&parseTime=True&loc=Local",
+		data.MYSql.User,
+		data.MYSql.Password,
+		data.MYSql.Protocol,
+		data.MYSql.Host,
+		data.MYSql.Port,
+		data.MYSql.DBName,
+	)
+
+	db, _ := gorm.Open(mysql.Open(dns), &gorm.Config{})
+
+	var cust Cust
+	db.Take(&cust) // pass pointer of data to Create
+
+	return cust
+}
+
+func LoadidDB(cu_id int) Cust {
+
+	// Load config from CONFIG.json file
+	file, _ := ioutil.ReadFile("CONFIG.json")
+	data := MyConfig{}
+	_ = json.Unmarshal([]byte(file), &data)
+
+	dns := fmt.Sprintf(
+		"%s:%s@%s(%s:%s)/%s?charset=utf8&parseTime=True&loc=Local",
+		data.MYSql.User,
+		data.MYSql.Password,
+		data.MYSql.Protocol,
+		data.MYSql.Host,
+		data.MYSql.Port,
+		data.MYSql.DBName,
+	)
+
+	db, _ := gorm.Open(mysql.Open(dns), &gorm.Config{})
+
+	var cust Cust
+	db.Take(&cust, cu_id) // pass pointer of data to Create
+
+	return cust
+}

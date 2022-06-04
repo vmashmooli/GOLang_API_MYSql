@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
+	"strconv"
 	"testserver/MySqlDB"
 
 	"github.com/labstack/echo/v4"
@@ -33,6 +34,16 @@ func testdb(c echo.Context) error {
 	}
 }
 
+func loaddb(c echo.Context) error {
+
+	return c.JSONPretty(http.StatusOK, MySqlDB.LoadDB(), "")
+}
+
+func loadiddb(c echo.Context) error {
+	id, _ := strconv.Atoi(c.Param("id"))
+	return c.JSONPretty(http.StatusOK, MySqlDB.LoadidDB(id), "")
+}
+
 func insertdb(c echo.Context) error {
 	stat, num := MySqlDB.InsertDB()
 
@@ -52,7 +63,7 @@ func main() {
 		var appConfig map[string]string
 		appConfig, err := godotenv.Read()
 
-		if err != nil {
+			if err != nil {
 			log.Fatal("Error reading .env file")
 		}
 		PNum = ":" + appConfig["SERVER_PORT"]
@@ -74,7 +85,11 @@ func main() {
 	})
 
 	e.GET("/testdb", testdb)
-	e.GET("/insert", insertdb)
+	e.GET("/loadinfo", loaddb)
+	e.GET("/loadinfo/:id", loadiddb)
+	// e.GET("/insert", insertdb)
+
+	e.GET("/api/insert", insertdb)
 	e.Logger.Fatal(e.Start(PNum))
 
 }
